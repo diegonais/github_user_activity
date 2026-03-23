@@ -24,8 +24,7 @@ const colors = {
 };
 
 const c = (color, text) => `${colors[color]}${text}${colors.reset}`;
-
-// Mapea cada tipo de evento de GitHub a una descripción legible con ícono
+// Mapea cada tipo de evento de GitHub a una descripción legible con etiqueta de texto
 function formatEvent(event) {
   const repo = c("cyan", event.repo.name);
   const payload = event.payload;
@@ -34,83 +33,83 @@ function formatEvent(event) {
     case "PushEvent": {
       const count = payload.commits?.length ?? 0;
       const branch = payload.ref?.replace("refs/heads/", "") ?? "desconocido";
-      return `${c("green", "⬆")}  Pushed ${c("bright", count)} commit${count !== 1 ? "s" : ""} to ${c("yellow", branch)} in ${repo}`;
+      return `${c("green", "[PUSH]")}  Pushed ${c("bright", count)} commit${count !== 1 ? "s" : ""} to ${c("yellow", branch)} in ${repo}`;
     }
 
     case "IssuesEvent": {
       const action = payload.action;
       const issue = `#${payload.issue?.number}`;
       const title = payload.issue?.title ?? "";
-      return `${c("magenta", "◉")}  ${capitalize(action)} issue ${c("yellow", issue)} "${title}" in ${repo}`;
+      return `${c("magenta", "[ISSUE]")}  ${capitalize(action)} issue ${c("yellow", issue)} "${title}" in ${repo}`;
     }
 
     case "IssueCommentEvent": {
       const issue = `#${payload.issue?.number}`;
       const title = payload.issue?.title ?? "";
-      return `${c("magenta", "💬")}  Commented on issue ${c("yellow", issue)} "${title}" in ${repo}`;
+      return `${c("magenta", "[COMMENT]")}  Commented on issue ${c("yellow", issue)} "${title}" in ${repo}`;
     }
 
     case "WatchEvent":
-      return `${c("yellow", "★")}  Starred ${repo}`;
+      return `${c("yellow", "[STAR]")}  Starred ${repo}`;
 
     case "ForkEvent": {
       const forkee = payload.forkee?.full_name ?? "unknown";
-      return `${c("blue", "⑂")}  Forked ${repo} → ${c("cyan", forkee)}`;
+      return `${c("blue", "[FORK]")}  Forked ${repo} to ${c("cyan", forkee)}`;
     }
 
     case "CreateEvent": {
       const refType = payload.ref_type;
       const ref = payload.ref ? ` ${c("yellow", payload.ref)}` : "";
-      return `${c("green", "✚")}  Created ${refType}${ref} in ${repo}`;
+      return `${c("green", "[CREATE]")}  Created ${refType}${ref} in ${repo}`;
     }
 
     case "DeleteEvent": {
       const refType = payload.ref_type;
       const ref = payload.ref ? ` ${c("yellow", payload.ref)}` : "";
-      return `${c("red", "✖")}  Deleted ${refType}${ref} in ${repo}`;
+      return `${c("red", "[DELETE]")}  Deleted ${refType}${ref} in ${repo}`;
     }
 
     case "PullRequestEvent": {
       const action = payload.action;
       const pr = `#${payload.pull_request?.number}`;
       const title = payload.pull_request?.title ?? "";
-      return `${c("blue", "⬡")}  ${capitalize(action)} PR ${c("yellow", pr)} "${title}" in ${repo}`;
+      return `${c("blue", "[PR]")}  ${capitalize(action)} PR ${c("yellow", pr)} "${title}" in ${repo}`;
     }
 
     case "PullRequestReviewEvent": {
       const action = payload.review?.state ?? "reviewed";
       const pr = `#${payload.pull_request?.number}`;
-      return `${c("blue", "✔")}  ${capitalize(action)} PR ${c("yellow", pr)} in ${repo}`;
+      return `${c("blue", "[PR REVIEW]")}  ${capitalize(action)} PR ${c("yellow", pr)} in ${repo}`;
     }
 
     case "PullRequestReviewCommentEvent": {
       const pr = `#${payload.pull_request?.number}`;
-      return `${c("blue", "💬")}  Commented on PR ${c("yellow", pr)} in ${repo}`;
+      return `${c("blue", "[PR COMMENT]")}  Commented on PR ${c("yellow", pr)} in ${repo}`;
     }
 
     case "ReleaseEvent": {
       const tag = payload.release?.tag_name ?? "unknown";
-      return `${c("green", "🏷")}  Released ${c("yellow", tag)} in ${repo}`;
+      return `${c("green", "[RELEASE]")}  Released ${c("yellow", tag)} in ${repo}`;
     }
 
     case "PublicEvent":
-      return `${c("green", "🌐")}  Made ${repo} public`;
+      return `${c("green", "[PUBLIC]")}  Made ${repo} public`;
 
     case "MemberEvent": {
       const member = payload.member?.login ?? "unknown";
-      return `${c("cyan", "👤")}  ${capitalize(payload.action)} ${c("bright", member)} as collaborator in ${repo}`;
+      return `${c("cyan", "[MEMBER]")}  ${capitalize(payload.action)} ${c("bright", member)} as collaborator in ${repo}`;
     }
 
     case "CommitCommentEvent":
-      return `${c("gray", "💬")}  Commented on a commit in ${repo}`;
+      return `${c("gray", "[COMMENT]")}  Commented on a commit in ${repo}`;
 
     case "GollumEvent": {
       const pages = payload.pages?.length ?? 0;
-      return `${c("yellow", "📝")}  Updated ${pages} wiki page${pages !== 1 ? "s" : ""} in ${repo}`;
+      return `${c("yellow", "[WIKI]")}  Updated ${pages} wiki page${pages !== 1 ? "s" : ""} in ${repo}`;
     }
 
     default:
-      return `${c("gray", "•")}  ${event.type.replace("Event", "")} in ${repo}`;
+      return `${c("gray", "[EVENT]")}  ${event.type.replace("Event", "")} in ${repo}`;
   }
 }
 
