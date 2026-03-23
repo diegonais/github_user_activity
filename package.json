@@ -1,0 +1,16 @@
+{
+  "name": "github-user-activity",
+  "version": "1.0.0",
+  "description": "CLI tool to fetch and display GitHub user activity",
+  "main": "github-activity.js",
+  "bin": {
+    "github-activity": "./github-activity.js"
+  },
+  "scripts": {
+    "start": "node github-activity.js"
+  },
+  "keywords": ["github", "cli", "activity"],
+  "author": "",
+  "license": "MIT",
+  "type": "module"
+}
